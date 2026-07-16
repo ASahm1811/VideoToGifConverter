@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="VideoToGifConverter.Core/VideoToGifConverter.Core.csproj" Id="e99a047d-8ab5-4bab-a42f-bd18e0393eb3" />
+  <Project Path="VideoToGifConverter.Desktop/VideoToGifConverter.Desktop.csproj" />
+  <Project Path="VideoToGifConverter.Tests/VideoToGifConverter.Tests.csproj" Id="30e389ea-d90a-4363-87e7-47af5b402893" />
+</Solution>
