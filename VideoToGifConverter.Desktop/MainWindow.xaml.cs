@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Windows;
+using Microsoft.Win32;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -22,13 +23,23 @@ namespace VideoToGifConverter.Desktop
             InitializeComponent();
         }
 
-        private void HelloButton_Click(object sender, RoutedEventArgs e)
+        private void SelectVideoButton_Click(object sender, RoutedEventArgs e)
         {
-            var converter = new VideoConverter();
+            // Handle video selection logic here
+            OpenFileDialog dialog = new OpenFileDialog();
 
-            string version = converter.GetVersion();
+            dialog.Title = "Select a video to convert";
+            dialog.Filter = "Video Files|*.mp4;*.avi;*.mov;*.mkv;*.wmv|All Files|*.*";
 
-            MessageBox.Show(version);
+            bool? result = dialog.ShowDialog();
+
+            if (result == true)
+            {
+                string filePath = dialog.FileName;
+
+                MessageBox.Show(filePath);
+            }
         }
+
     }
 }

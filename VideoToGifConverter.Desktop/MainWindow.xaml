@@ -8,10 +8,12 @@
         Title="Video to GIF Converter" Height="450" Width="800">
     <Grid>
         <Button
-        Name="HelloButton"
-        Width="150"
+        Name="SelectVideoButton"
+        Width="160"
         Height="40"
-        Content="Show Version"
-        Click="HelloButton_Click"/>
+        Content="Select Video"
+        Click="SelectVideoButton_Click"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"/>
     </Grid>
 </Window>
