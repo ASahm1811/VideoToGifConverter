@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Windows;
 using Microsoft.Win32;
+using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -42,6 +43,9 @@ namespace VideoToGifConverter.Desktop
                 string fileName = _converter.GetFileName(filePath);
 
                 SelectedVideoText.Text = fileName;
+
+                _converter.ConvertToGif(filePath, "output.gif");
+
             }
         }
 
