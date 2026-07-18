@@ -18,6 +18,8 @@ namespace VideoToGifConverter.Desktop
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly VideoConverter _converter = new VideoConverter();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -37,7 +39,9 @@ namespace VideoToGifConverter.Desktop
             {
                 string filePath = dialog.FileName;
 
-                SelectedVideoText.Text = filePath;
+                string fileName = _converter.GetFileName(filePath);
+
+                SelectedVideoText.Text = fileName;
             }
         }
 
