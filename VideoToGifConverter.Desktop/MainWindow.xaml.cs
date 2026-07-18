@@ -37,7 +37,7 @@ namespace VideoToGifConverter.Desktop
             {
                 string filePath = dialog.FileName;
 
-                MessageBox.Show(filePath);
+                SelectedVideoText.Text = filePath;
             }
         }
 

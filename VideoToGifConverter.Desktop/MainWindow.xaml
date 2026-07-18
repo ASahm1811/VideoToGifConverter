@@ -7,13 +7,24 @@
         mc:Ignorable="d"
         Title="Video to GIF Converter" Height="450" Width="800">
     <Grid>
-        <Button
-        Name="SelectVideoButton"
-        Width="160"
-        Height="40"
-        Content="Select Video"
-        Click="SelectVideoButton_Click"
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center"/>
+        <StackPanel>
+
+            <TextBlock
+            Text="Selected video:"
+            FontWeight="Bold"/>
+
+            <TextBlock
+            Name="SelectedVideoText"
+            Margin="0,5,0,20"
+            Text="No video selected."/>
+
+            <Button
+            Name="SelectVideoButton"
+            Width="160"
+            Height="40"
+            Content="Select Video"
+            Click="SelectVideoButton_Click"/>
+
+        </StackPanel>
     </Grid>
 </Window>
