@@ -15,12 +15,18 @@ public class VideoConverter
 
     public void ConvertToGif(string inputPath, string outputPath)
     {
+        string pathExe = Path.Combine(AppContext.BaseDirectory, "ffmpeg", "ffmpeg.exe");
+
         ProcessStartInfo startInfo = new ProcessStartInfo();
-        startInfo.FileName = "notepad.exe";
+        startInfo.FileName = pathExe;
+        startInfo.Arguments = $"-y -i \"{inputPath}\" \"{outputPath}\"";
+        startInfo.UseShellExecute = false;
+        startInfo.CreateNoWindow = true;
 
         Process process = new Process();
         process.StartInfo = startInfo;
         process.Start();
+        process.WaitForExit();
 
     }
 

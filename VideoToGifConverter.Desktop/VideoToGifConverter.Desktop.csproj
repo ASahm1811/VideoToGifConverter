@@ -12,4 +12,13 @@
     <ProjectReference Include="..\VideoToGifConverter.Core\VideoToGifConverter.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="ffmpeg\ffmpeg.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ffmpeg\ffprobe.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
