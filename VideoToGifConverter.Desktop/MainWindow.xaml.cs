@@ -60,7 +60,16 @@ namespace VideoToGifConverter.Desktop
 
             string outputPath = Path.ChangeExtension(_selectedVideoPath, ".gif");
 
-            _converter.ConvertToGif(_selectedVideoPath, outputPath);
+            bool success = _converter.ConvertToGif(_selectedVideoPath, outputPath);
+
+            if (success)
+            {
+                MessageBox.Show("Conversion completed!");
+            }
+            else
+            {
+                MessageBox.Show("Conversion failed.");
+            }
         }
     }
 }
