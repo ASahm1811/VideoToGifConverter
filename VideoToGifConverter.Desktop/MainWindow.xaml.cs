@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.IO;
 using VideoToGifConverter.Core.Services;
+using System.Threading.Tasks;
 
 namespace VideoToGifConverter.Desktop
 {
@@ -50,7 +51,7 @@ namespace VideoToGifConverter.Desktop
             }
         }
 
-        private void Convert_Click(object sender, RoutedEventArgs e)
+        private async void Convert_Click(object sender, RoutedEventArgs e)
         {
             if (_selectedVideoPath == null)
             {
@@ -60,7 +61,7 @@ namespace VideoToGifConverter.Desktop
 
             string outputPath = Path.ChangeExtension(_selectedVideoPath, ".gif");
 
-            bool success = _converter.ConvertToGif(_selectedVideoPath, outputPath);
+            bool success = await _converter.ConvertToGifAsync(_selectedVideoPath, outputPath);
 
             if (success)
             {

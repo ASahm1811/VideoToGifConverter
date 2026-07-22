@@ -13,7 +13,7 @@ public class VideoConverter
         return Path.GetFileName(filePath);
     }
 
-    public bool ConvertToGif(string inputPath, string outputPath)
+    public async Task<bool> ConvertToGifAsync(string inputPath, string outputPath)
     {
         string pathExe = Path.Combine(AppContext.BaseDirectory, "ffmpeg", "ffmpeg.exe");
 
@@ -26,7 +26,7 @@ public class VideoConverter
         Process process = new Process();
         process.StartInfo = startInfo;
         process.Start();
-        process.WaitForExit();
+        await process.WaitForExitAsync();
 
 
         return process.ExitCode == 0;
