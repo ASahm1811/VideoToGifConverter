@@ -9,7 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.IO;
 using VideoToGifConverter.Core.Services;
 
 namespace VideoToGifConverter.Desktop
@@ -20,6 +20,7 @@ namespace VideoToGifConverter.Desktop
     public partial class MainWindow : Window
     {
         private readonly VideoConverter _converter = new VideoConverter();
+        private string? _selectedVideoPath;
 
         public MainWindow()
         {
@@ -40,14 +41,26 @@ namespace VideoToGifConverter.Desktop
             {
                 string filePath = dialog.FileName;
 
+                _selectedVideoPath = filePath;
+
                 string fileName = _converter.GetFileName(filePath);
 
                 SelectedVideoText.Text = fileName;
 
-                _converter.ConvertToGif(filePath, "output.gif");
-
             }
         }
 
+        private void Convert_Click(object sender, RoutedEventArgs e)
+        {
+            if (_selectedVideoPath == null)
+            {
+                MessageBox.Show("Please select a video first.");
+                return;
+            }
+
+            string outputPath = Path.ChangeExtension(_selectedVideoPath, ".gif");
+
+            _converter.ConvertToGif(_selectedVideoPath, outputPath);
+        }
     }
 }

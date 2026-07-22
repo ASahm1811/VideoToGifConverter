@@ -25,6 +25,12 @@
             Content="Select Video"
             Click="SelectVideoButton_Click"/>
 
+            <Button
+            Content="Convert"
+            Width="100"
+            Margin="0,10,0,0"
+            Click="Convert_Click"/>
+
         </StackPanel>
     </Grid>
 </Window>
