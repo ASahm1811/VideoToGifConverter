@@ -64,6 +64,7 @@ namespace VideoToGifConverter.Desktop
 
             ConvertButton.IsEnabled = false;
             ConvertButton.Content = "Converting...";
+            ConversionProgressBar.Visibility = Visibility.Visible;
 
             try
             {
@@ -86,6 +87,7 @@ namespace VideoToGifConverter.Desktop
             {
                 ConvertButton.IsEnabled = true;
                 ConvertButton.Content = "Convert";
+                ConversionProgressBar.Visibility = Visibility.Collapsed;
             }
         }
     }
