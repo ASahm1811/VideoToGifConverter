@@ -48,6 +48,7 @@ namespace VideoToGifConverter.Desktop
 
                 SelectedVideoText.Text = fileName;
 
+
             }
         }
 
@@ -61,15 +62,30 @@ namespace VideoToGifConverter.Desktop
 
             string outputPath = Path.ChangeExtension(_selectedVideoPath, ".gif");
 
-            bool success = await _converter.ConvertToGifAsync(_selectedVideoPath, outputPath);
+            ConvertButton.IsEnabled = false;
+            ConvertButton.Content = "Converting...";
 
-            if (success)
+            try
             {
-                MessageBox.Show("Conversion completed!");
+                bool success = await _converter.ConvertToGifAsync(_selectedVideoPath, outputPath);
+
+                if (success)
+                {
+                    MessageBox.Show("Conversion completed!");
+                }
+                else
+                {
+                    MessageBox.Show("Conversion failed.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Conversion failed.");
+                MessageBox.Show($"An error occurred:\n{ex.Message}");
+            }
+            finally
+            {
+                ConvertButton.IsEnabled = true;
+                ConvertButton.Content = "Convert";
             }
         }
     }
