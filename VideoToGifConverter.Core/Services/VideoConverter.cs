@@ -18,6 +18,12 @@ public class VideoConverter
 
         string pathExe = Path.Combine(AppContext.BaseDirectory, "ffmpeg", "ffmpeg.exe");
 
+        if (!File.Exists(pathExe))
+        {
+            LastError = "FFmpeg executable was not found.";
+            return false;
+        }
+
         ProcessStartInfo startInfo = new ProcessStartInfo();
         startInfo.FileName = pathExe;
         startInfo.Arguments = $"-y -i \"{inputPath}\" -r {options.Fps} -vf \"scale={options.Width}:-1\" \"{outputPath}\"";
