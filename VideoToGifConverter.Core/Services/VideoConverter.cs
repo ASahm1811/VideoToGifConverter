@@ -16,7 +16,7 @@ public class VideoConverter
 
         ProcessStartInfo startInfo = new ProcessStartInfo();
         startInfo.FileName = pathExe;
-        startInfo.Arguments = $"-y -i \"{inputPath}\" -r {options.Fps} \"{outputPath}\"";
+        startInfo.Arguments = $"-y -i \"{inputPath}\" -r {options.Fps} -vf \"scale={options.Width}:-1\" \"{outputPath}\"";
         startInfo.UseShellExecute = false;
         startInfo.CreateNoWindow = true;
 

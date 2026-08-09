@@ -51,6 +51,38 @@ namespace VideoToGifConverter.Desktop
                 return;
             }
 
+            // Validate FPS
+            if (FpsComboBox.SelectedItem is not ComboBoxItem selectedItem)
+            {
+                return;
+            }
+
+            if (!int.TryParse(selectedItem.Content?.ToString(), out int fps))
+            {
+                MessageBox.Show("Invalid FPS value.");
+                return;
+            }
+
+            // Validate width
+            if (!int.TryParse(WidthTextBox.Text, out int width))
+            {
+                MessageBox.Show("Please enter a valid width.");
+                return;
+            }
+
+            if (width <= 0)
+            {
+                MessageBox.Show("Width must be greater than 0.");
+                return;
+            }
+
+            // Create options
+            var options = new GifConversionOptions
+            {
+                Fps = fps,
+                Width = width
+            };
+
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "GIF files (*.gif)|*.gif";
 
@@ -66,29 +98,17 @@ namespace VideoToGifConverter.Desktop
 
             string outputPath = saveFileDialog.FileName;
 
+            // NOW start the converting UI
             ConvertButton.IsEnabled = false;
             ConvertButton.Content = "Converting...";
             ConversionProgressBar.Visibility = Visibility.Visible;
 
-            if (FpsComboBox.SelectedItem is not ComboBoxItem selectedItem)
-            {
-                return;
-            }
-
-            if (!int.TryParse(selectedItem.Content?.ToString(), out int fps))
-            {
-                MessageBox.Show("Invalid FPS value.");
-                return;
-            }
-
-            var options = new GifConversionOptions
-            {
-                Fps = fps
-            };
-
             try
             {
-                bool success = await _converter.ConvertToGifAsync(_selectedVideoPath, outputPath, options);
+                bool success = await _converter.ConvertToGifAsync(
+                    _selectedVideoPath,
+                    outputPath,
+                    options);
 
                 if (success)
                 {

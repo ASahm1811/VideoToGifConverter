@@ -50,6 +50,22 @@
 
             </StackPanel>
 
+            <StackPanel
+            Orientation="Horizontal"
+            Margin="0,10,0,0">
+
+            <TextBlock
+            Text="Width:"
+            VerticalAlignment="Center"
+            Margin="0,0,10,0"/>
+
+            <TextBox
+            x:Name="WidthTextBox"
+            Width="100"
+            Text="480"/>
+
+            </StackPanel>
+
             <Button
                 x:Name="ConvertButton"
                 Content="Convert"
