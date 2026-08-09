@@ -1,6 +1,8 @@
-﻿using System.Windows;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System.IO;
+using System.Windows;
+using System.Windows.Controls;
+using VideoToGifConverter.Core.Models;
 using VideoToGifConverter.Core.Services;
 
 namespace VideoToGifConverter.Desktop
@@ -38,7 +40,6 @@ namespace VideoToGifConverter.Desktop
 
                 SelectedVideoText.Text = fileName;
 
-
             }
         }
 
@@ -69,9 +70,25 @@ namespace VideoToGifConverter.Desktop
             ConvertButton.Content = "Converting...";
             ConversionProgressBar.Visibility = Visibility.Visible;
 
+            if (FpsComboBox.SelectedItem is not ComboBoxItem selectedItem)
+            {
+                return;
+            }
+
+            if (!int.TryParse(selectedItem.Content?.ToString(), out int fps))
+            {
+                MessageBox.Show("Invalid FPS value.");
+                return;
+            }
+
+            var options = new GifConversionOptions
+            {
+                Fps = fps
+            };
+
             try
             {
-                bool success = await _converter.ConvertToGifAsync(_selectedVideoPath, outputPath);
+                bool success = await _converter.ConvertToGifAsync(_selectedVideoPath, outputPath, options);
 
                 if (success)
                 {

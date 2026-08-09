@@ -1,44 +1,71 @@
 ﻿<Window x:Class="VideoToGifConverter.Desktop.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:VideoToGifConverter.Desktop"
-        mc:Ignorable="d"
-        Title="Video to GIF Converter" Height="450" Width="800">
-    <Grid>
+        Title="Video to GIF Converter"
+        Height="400"
+        Width="500">
+
+    <Grid Margin="20">
+
         <StackPanel>
 
             <TextBlock
-            Text="Selected video:"
-            FontWeight="Bold"/>
+                Text="Selected video:"
+                FontWeight="Bold"/>
 
             <TextBlock
-            Name="SelectedVideoText"
-            Margin="0,5,0,20"
-            Text="No video selected."/>
+                x:Name="SelectedVideoText"
+                Margin="0,5,0,20"
+                Text="No video selected."/>
 
             <Button
-            Name="SelectVideoButton"
-            Width="160"
-            Height="40"
-            Content="Select Video"
-            Click="SelectVideoButton_Click"/>
+                x:Name="SelectVideoButton"
+                Width="160"
+                Height="40"
+                Content="Select Video"
+                Click="SelectVideoButton_Click"/>
+
+            <StackPanel
+                Orientation="Horizontal"
+                Margin="0,10,0,0">
+
+                <TextBlock
+                    Text="FPS:"
+                    VerticalAlignment="Center"
+                    Margin="0,0,10,0"/>
+
+                <ComboBox
+                    x:Name="FpsComboBox"
+                    Width="100"
+                    SelectedIndex="0">
+
+                    <ComboBoxItem Content="10"/>
+                    <ComboBoxItem Content="12"/>
+                    <ComboBoxItem Content="15"/>
+                    <ComboBoxItem Content="20"/>
+                    <ComboBoxItem Content="24"/>
+                    <ComboBoxItem Content="30"/>
+
+                </ComboBox>
+
+            </StackPanel>
 
             <Button
-            x:Name="ConvertButton"
-            Content="Convert"
-            Width="100"
-            Margin="0,10,0,0"
-            Click="Convert_Click"/>
+                x:Name="ConvertButton"
+                Content="Convert"
+                Width="100"
+                Margin="0,10,0,0"
+                Click="Convert_Click"/>
 
             <ProgressBar
-            x:Name="ConversionProgressBar"
-            Height="20"
-            Margin="0,10,0,0"
-            IsIndeterminate="True"
-            Visibility="Collapsed"/>
+                x:Name="ConversionProgressBar"
+                Height="20"
+                Margin="0,10,0,0"
+                IsIndeterminate="True"
+                Visibility="Collapsed"/>
 
         </StackPanel>
+
     </Grid>
+
 </Window>
