@@ -116,7 +116,7 @@ namespace VideoToGifConverter.Desktop
                 }
                 else
                 {
-                    MessageBox.Show("Conversion failed.");
+                    MessageBox.Show($"Conversion failed:\n\n{_converter.LastError}");
                 }
             }
             catch (Exception ex)
