@@ -50,7 +50,20 @@ namespace VideoToGifConverter.Desktop
                 return;
             }
 
-            string outputPath = Path.ChangeExtension(_selectedVideoPath, ".gif");
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "GIF files (*.gif)|*.gif";
+
+            string fileName = Path.GetFileNameWithoutExtension(_selectedVideoPath);
+            saveFileDialog.FileName = $"{fileName}.gif";
+
+            bool? result = saveFileDialog.ShowDialog();
+
+            if (result != true)
+            {
+                return;
+            }
+
+            string outputPath = saveFileDialog.FileName;
 
             ConvertButton.IsEnabled = false;
             ConvertButton.Content = "Converting...";
