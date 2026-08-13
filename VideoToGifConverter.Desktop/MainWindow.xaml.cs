@@ -12,7 +12,7 @@ namespace VideoToGifConverter.Desktop
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly VideoConverter _converter = new VideoConverter();
+        private readonly VideoConverter _converter = new VideoConverter(new ProcessRunner(), new FileSystem());
         private string? _selectedVideoPath;
 
         public MainWindow()

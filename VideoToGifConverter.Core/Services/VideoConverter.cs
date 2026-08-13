@@ -5,7 +5,16 @@ namespace VideoToGifConverter.Core.Services;
 
 public class VideoConverter
 {
+    private readonly IProcessRunner _processRunner;
+    private readonly IFileSystem _fileSystem;
+
     public string? LastError { get; private set; }
+
+    public VideoConverter(IProcessRunner processRunner, IFileSystem fileSystem)
+    {
+        _processRunner = processRunner;
+        _fileSystem = fileSystem;
+    }
 
     public string GetFileName(string filePath)
     {
@@ -18,7 +27,7 @@ public class VideoConverter
 
         string pathExe = Path.Combine(AppContext.BaseDirectory, "ffmpeg", "ffmpeg.exe");
 
-        if (!File.Exists(pathExe))
+        if (!_fileSystem.FileExists(pathExe))
         {
             LastError = "FFmpeg executable was not found.";
             return false;
@@ -31,16 +40,13 @@ public class VideoConverter
         startInfo.CreateNoWindow = true;
         startInfo.RedirectStandardError = true;
 
-        Process process = new Process();
-        process.StartInfo = startInfo;
-        process.Start();
+        _processRunner.Start(startInfo);
 
-        string errorOutput = await process.StandardError.ReadToEndAsync();
+        string errorOutput = await _processRunner.ReadStandardErrorAsync();
 
-        await process.WaitForExitAsync();
+        await _processRunner.WaitForExitAsync();
 
-
-        if (process.ExitCode != 0)
+        if (_processRunner.ExitCode != 0)
         {
             LastError = errorOutput;
             return false;
