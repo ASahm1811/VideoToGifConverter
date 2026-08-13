@@ -4,7 +4,7 @@
 
 VideoToGifConverter uses FFmpeg for video processing.
 
-The bundled FFmpeg binary is:
+The application is developed and tested with the following FFmpeg build:
 
 - Version: 8.1.2
 - Build: Gyan.dev Windows essentials build
@@ -15,9 +15,8 @@ The bundled FFmpeg binary is:
 - FFmpeg license: https://ffmpeg.org/legal.html
 - Corresponding FFmpeg source: https://github.com/FFmpeg/FFmpeg/commit/38b88335f9
 
-The FFmpeg binary is a separate third-party component and is not
-part of the VideoToGifConverter source code.
+The FFmpeg executable is not included in this source repository.
 
-This project distributes an FFmpeg binary provided by Gyan.dev.
-Please refer to the FFmpeg and Gyan.dev licensing information for
-the applicable terms and source-code requirements.
+A future packaged release may include an FFmpeg binary. Any such
+distribution will provide the applicable FFmpeg license and
+corresponding source information required by the applicable license.
