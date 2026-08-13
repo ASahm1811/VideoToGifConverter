@@ -8,7 +8,7 @@ The application is developed and tested with the following FFmpeg build:
 
 - Version: 8.1.2
 - Build: Gyan.dev Windows essentials build
-- License: GNU General Public License v3.0
+- License: GNU General Public License v3.0 (GPLv3)
 - Configuration: `--enable-gpl --enable-version3`
 - Project: https://ffmpeg.org/
 - Windows build provider: https://www.gyan.dev/ffmpeg/builds/
