@@ -62,7 +62,9 @@ The first working version of the application is complete and has been tested wit
 
 This application uses FFmpeg for video processing.
 
-FFmpeg is a separate open-source project. See the FFmpeg website for
-licensing information:
+The source repository does not include the FFmpeg executable. The
+application is developed and tested with the Gyan.dev Windows
+essentials build of FFmpeg 8.1.2.
 
-https://ffmpeg.org/
+See [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) for FFmpeg
+build and licensing information.
