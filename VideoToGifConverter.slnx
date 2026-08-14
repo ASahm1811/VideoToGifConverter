@@ -1,6 +1,11 @@
 <Solution>
+  <Folder Name="/docs/" />
+  <Folder Name="/docs/images/">
+    <File Path="../../Users/ASahm/Desktop/main_window.png" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path="README.md" />
+    <File Path="THIRD-PARTY-NOTICES.md" />
   </Folder>
   <Project Path="VideoToGifConverter.Core/VideoToGifConverter.Core.csproj" Id="e99a047d-8ab5-4bab-a42f-bd18e0393eb3" />
   <Project Path="VideoToGifConverter.Desktop/VideoToGifConverter.Desktop.csproj" />
