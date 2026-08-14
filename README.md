@@ -2,7 +2,7 @@
 
 A desktop application for converting videos into GIFs using FFmpeg.
 
-![VideoToGifConverter](docs/images/main_window.png)
+<img src="docs/images/main_window.png" alt="VideoToGifConverter" width="600">
 
 ## Features
 
