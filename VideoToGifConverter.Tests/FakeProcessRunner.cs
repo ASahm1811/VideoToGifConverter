@@ -9,8 +9,11 @@ public class FakeProcessRunner : IProcessRunner
 
     public string ErrorOutput { get; set; } = string.Empty;
 
+    public ProcessStartInfo? StartInfo { get; private set; }
+
     public void Start(ProcessStartInfo startInfo)
     {
+        StartInfo = startInfo;
     }
 
     public Task<string> ReadStandardErrorAsync()
