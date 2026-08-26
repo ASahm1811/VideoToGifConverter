@@ -11,14 +11,24 @@ public class FakeProcessRunner : IProcessRunner
 
     public ProcessStartInfo? StartInfo { get; private set; }
 
+    private bool _hasReadErrorOutput;
+
     public void Start(ProcessStartInfo startInfo)
     {
         StartInfo = startInfo;
+        _hasReadErrorOutput = false;
     }
 
-    public Task<string> ReadStandardErrorAsync()
+    public Task<string?> ReadStandardErrorLineAsync()
     {
-        return Task.FromResult(ErrorOutput);
+        if (_hasReadErrorOutput)
+        {
+            return Task.FromResult<string?>(null);
+        }
+
+        _hasReadErrorOutput = true;
+
+        return Task.FromResult<string?>(ErrorOutput);
     }
 
     public Task WaitForExitAsync()

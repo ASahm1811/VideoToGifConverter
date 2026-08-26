@@ -6,7 +6,7 @@ public interface IProcessRunner
 {
     void Start(ProcessStartInfo startInfo);
 
-    Task<string> ReadStandardErrorAsync();
+    Task<string?> ReadStandardErrorLineAsync();
 
     Task WaitForExitAsync();
 

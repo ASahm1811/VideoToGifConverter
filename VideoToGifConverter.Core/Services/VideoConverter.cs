@@ -42,7 +42,14 @@ public class VideoConverter
 
         _processRunner.Start(startInfo);
 
-        string errorOutput = await _processRunner.ReadStandardErrorAsync();
+        string? errorOutput = null;
+
+        string? line;
+
+        while ((line = await _processRunner.ReadStandardErrorLineAsync()) != null)
+        {
+            errorOutput = line;
+        }
 
         await _processRunner.WaitForExitAsync();
 

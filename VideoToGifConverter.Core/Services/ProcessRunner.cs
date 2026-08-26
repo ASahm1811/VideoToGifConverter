@@ -18,14 +18,14 @@ public class ProcessRunner : IProcessRunner
         _process.Start();
     }
 
-    public async Task<string> ReadStandardErrorAsync()
+    public async Task<string?> ReadStandardErrorLineAsync()
     {
         if (_process == null)
         {
             throw new InvalidOperationException("Process has not been started.");
         }
 
-        return await _process.StandardError.ReadToEndAsync();
+        return await _process.StandardError.ReadLineAsync();
     }
 
     public async Task WaitForExitAsync()
