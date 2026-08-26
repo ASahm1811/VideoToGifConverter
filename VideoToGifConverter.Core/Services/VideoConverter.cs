@@ -21,7 +21,7 @@ public class VideoConverter
         return Path.GetFileName(filePath);
     }
 
-    public async Task<bool> ConvertToGifAsync(string inputPath, string outputPath, GifConversionOptions options)
+    public async Task<bool> ConvertToGifAsync(string inputPath, string outputPath, GifConversionOptions options, IProgress<double>? progress = null)
     {
         LastError = null;
 
@@ -49,6 +49,7 @@ public class VideoConverter
         while ((line = await _processRunner.ReadStandardErrorLineAsync()) != null)
         {
             errorOutput = line;
+            progress?.Report(0);
         }
 
         await _processRunner.WaitForExitAsync();

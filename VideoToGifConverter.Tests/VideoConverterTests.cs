@@ -3,6 +3,7 @@ using VideoToGifConverter.Core.Services;
 
 namespace VideoToGifConverter.Tests
 {
+
     public class VideoConverterTests
     {
         [Fact]
@@ -132,7 +133,7 @@ namespace VideoToGifConverter.Tests
             var fakeProcessRunner = new FakeProcessRunner
             {
                 ExitCode = 1,
-                ErrorOutput = "Fake FFmpeg error"
+                ErrorOutputLines = { "Fake FFmpeg error" }
             };
 
             var fakeFileSystem = new FakeFileSystem
@@ -169,7 +170,7 @@ namespace VideoToGifConverter.Tests
             var fakeProcessRunner = new FakeProcessRunner
             {
                 ExitCode = 0,
-                ErrorOutput = string.Empty
+                ErrorOutputLines = { }
             };
 
             var fakeFileSystem = new FakeFileSystem
@@ -282,6 +283,57 @@ namespace VideoToGifConverter.Tests
             Assert.True(fakeProcessRunner.StartInfo.RedirectStandardError);
         }
 
+        [Fact]
+        public async Task ConvertToGifAsync_ShouldReportProgress()
+        {
+            // Arrange
+            var fakeProcessRunner = new FakeProcessRunner
+            {
+                ExitCode = 0
+            };
+
+            fakeProcessRunner.ErrorOutputLines.Add("line 1");
+            fakeProcessRunner.ErrorOutputLines.Add("line 2");
+
+            var fakeFileSystem = new FakeFileSystem
+            {
+                FileExistsResult = true
+            };
+
+            var converter = new VideoConverter(
+                fakeProcessRunner,
+                fakeFileSystem);
+
+            var options = new GifConversionOptions
+            {
+                Fps = 10,
+                Width = 480
+            };
+
+            var progress = new TestProgress();
+
+            // Act
+            bool result = await converter.ConvertToGifAsync(
+                "test.mp4",
+                "test.gif",
+                options,
+                progress);
+
+            // Assert
+            Assert.True(result);
+            Assert.Equal(2, progress.Values.Count);
+            Assert.All(progress.Values, value => Assert.Equal(0, value));
+        }
+
+        private class TestProgress : IProgress<double>
+        {
+            public List<double> Values { get; } = new();
+
+            public void Report(double value)
+            {
+                Values.Add(value);
+            }
+        }
 
     }
 }

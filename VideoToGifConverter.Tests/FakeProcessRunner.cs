@@ -7,28 +7,29 @@ public class FakeProcessRunner : IProcessRunner
 {
     public int ExitCode { get; set; }
 
-    public string ErrorOutput { get; set; } = string.Empty;
+    public List<string> ErrorOutputLines { get; } = new List<string>();
 
     public ProcessStartInfo? StartInfo { get; private set; }
 
-    private bool _hasReadErrorOutput;
+    private int _currentLineIndex;
 
     public void Start(ProcessStartInfo startInfo)
     {
         StartInfo = startInfo;
-        _hasReadErrorOutput = false;
+        _currentLineIndex = 0;
     }
 
     public Task<string?> ReadStandardErrorLineAsync()
     {
-        if (_hasReadErrorOutput)
+        if (_currentLineIndex >= ErrorOutputLines.Count)
         {
             return Task.FromResult<string?>(null);
         }
 
-        _hasReadErrorOutput = true;
+        string line = ErrorOutputLines[_currentLineIndex];
+        _currentLineIndex++;
 
-        return Task.FromResult<string?>(ErrorOutput);
+        return Task.FromResult<string?>(line);
     }
 
     public Task WaitForExitAsync()
