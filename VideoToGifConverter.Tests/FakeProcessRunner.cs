@@ -5,6 +5,7 @@ namespace VideoToGifConverter.Tests;
 
 public class FakeProcessRunner : IProcessRunner
 {
+    public string StandardOutput { get; set; } = string.Empty;
     public int ExitCode { get; set; }
 
     public List<string> ErrorOutputLines { get; } = new List<string>();
@@ -30,6 +31,11 @@ public class FakeProcessRunner : IProcessRunner
         _currentLineIndex++;
 
         return Task.FromResult<string?>(line);
+    }
+
+    public Task<string> ReadStandardOutputAsync()
+    {
+        return Task.FromResult(StandardOutput);
     }
 
     public Task WaitForExitAsync()

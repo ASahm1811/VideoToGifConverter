@@ -8,6 +8,8 @@ public interface IProcessRunner
 
     Task<string?> ReadStandardErrorLineAsync();
 
+    Task<string> ReadStandardOutputAsync();
+
     Task WaitForExitAsync();
 
     int ExitCode { get; }

@@ -28,6 +28,16 @@ public class ProcessRunner : IProcessRunner
         return await _process.StandardError.ReadLineAsync();
     }
 
+    public async Task<string> ReadStandardOutputAsync()
+    {
+        if (_process == null)
+        {
+            throw new InvalidOperationException("Process has not been started.");
+        }
+
+        return await _process.StandardOutput.ReadToEndAsync();
+    }
+
     public async Task WaitForExitAsync()
     {
         if (_process == null)
