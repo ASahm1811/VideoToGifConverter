@@ -351,8 +351,11 @@ namespace VideoToGifConverter.Tests
                 ExitCode = 0
             };
 
-            fakeProcessRunner.ErrorOutputLines.Add("line 1");
-            fakeProcessRunner.ErrorOutputLines.Add("line 2");
+            fakeProcessRunner.ErrorOutputLines.Add(
+                "frame=100 fps=10 time=00:00:05.00 bitrate=100kbits/s");
+
+            fakeProcessRunner.ErrorOutputLines.Add(
+                "frame=200 fps=10 time=00:00:10.00 bitrate=100kbits/s");
 
             var fakeFileSystem = new FakeFileSystem
             {
@@ -387,7 +390,8 @@ namespace VideoToGifConverter.Tests
             // Assert
             Assert.True(result);
             Assert.Equal(2, progress.Values.Count);
-            Assert.All(progress.Values, value => Assert.Equal(0, value));
+            Assert.Equal(25, progress.Values[0]);
+            Assert.Equal(50, progress.Values[1]);
         }
 
         private class TestProgress : IProgress<double>

@@ -54,7 +54,18 @@ public class VideoConverter
         while ((line = await _processRunner.ReadStandardErrorLineAsync()) != null)
         {
             errorOutput = line;
-            progress?.Report(0);
+
+            TimeSpan? currentTime = FFmpegProgressParser.ParseTime(line);
+
+            if (currentTime.HasValue && duration > 0)
+            {
+                double percentage =
+                    currentTime.Value.TotalSeconds / duration * 100;
+
+                percentage = Math.Clamp(percentage, 0, 100);
+
+                progress?.Report(percentage);
+            }
         }
 
         await _processRunner.WaitForExitAsync();
