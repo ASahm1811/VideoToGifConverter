@@ -36,6 +36,8 @@ public class VideoConverter
             return false;
         }
 
+        double duration = await _mediaInfoProvider.GetDurationAsync(inputPath);
+
         ProcessStartInfo startInfo = new ProcessStartInfo();
         startInfo.FileName = pathExe;
         startInfo.Arguments = $"-y -i \"{inputPath}\" -r {options.Fps} -vf \"scale={options.Width}:-1\" \"{outputPath}\"";
