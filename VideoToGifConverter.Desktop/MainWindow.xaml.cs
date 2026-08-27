@@ -12,12 +12,23 @@ namespace VideoToGifConverter.Desktop
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly VideoConverter _converter = new VideoConverter(new ProcessRunner(), new FileSystem());
+        private readonly ProcessRunner _processRunner = new();
+        private readonly FileSystem _fileSystem = new();
+        private readonly FFprobeMediaInfoProvider _mediaInfoProvider;
+        private readonly VideoConverter _converter;
+
         private string? _selectedVideoPath;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            _mediaInfoProvider = new FFprobeMediaInfoProvider(_processRunner);
+
+            _converter = new VideoConverter(
+                _processRunner,
+                _fileSystem,
+                _mediaInfoProvider);
         }
 
         private void SelectVideoButton_Click(object sender, RoutedEventArgs e)

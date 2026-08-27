@@ -15,7 +15,17 @@ namespace VideoToGifConverter.Tests
             {
                 FileExistsResult = true
             };
-            var converter = new VideoConverter(fakeProcessRunner, fakeFileSystem);
+
+            var fakeMediaInfoProvider = new FakeMediaInfoProvider
+            {
+                Duration = 20
+            };
+
+            var converter = new VideoConverter(
+                fakeProcessRunner,
+                fakeFileSystem,
+                fakeMediaInfoProvider);
+
             string filePath = @"C:\Videos\sample.mp4";
 
             // Act
@@ -34,7 +44,17 @@ namespace VideoToGifConverter.Tests
             {
                 FileExistsResult = true
             };
-            var converter = new VideoConverter(fakeProcessRunner, fakeFileSystem);
+
+            var fakeMediaInfoProvider = new FakeMediaInfoProvider
+            {
+                Duration = 20
+            };
+
+            var converter = new VideoConverter(
+                fakeProcessRunner,
+                fakeFileSystem,
+                fakeMediaInfoProvider);
+
             string filePath = @"C:\Videos\my sample video.mp4";
 
             // Act
@@ -53,7 +73,11 @@ namespace VideoToGifConverter.Tests
             {
                 FileExistsResult = true
             };
-            var converter = new VideoConverter(fakeProcessRunner, fakeFileSystem);
+            var fakeMediaInfoProvider = new FakeMediaInfoProvider
+            {
+                Duration = 20
+            };
+            var converter = new VideoConverter(fakeProcessRunner, fakeFileSystem, fakeMediaInfoProvider);
             string filePath = @"C:\Videos\sample.avi";
             // Act
             string fileName = converter.GetFileName(filePath);
@@ -70,7 +94,11 @@ namespace VideoToGifConverter.Tests
             {
                 FileExistsResult = true
             };
-            var converter = new VideoConverter(fakeProcessRunner, fakeFileSystem);
+            var fakeMediaInfoProvider = new FakeMediaInfoProvider
+            {
+                Duration = 20
+            };
+            var converter = new VideoConverter(fakeProcessRunner, fakeFileSystem, fakeMediaInfoProvider);
             string filePath = @"C:\Videos\sample";
             // Act
             string fileName = converter.GetFileName(filePath);
@@ -87,7 +115,11 @@ namespace VideoToGifConverter.Tests
             {
                 FileExistsResult = true
             };
-            var converter = new VideoConverter(fakeProcessRunner, fakeFileSystem);
+            var fakeMediaInfoProvider = new FakeMediaInfoProvider
+            {
+                Duration = 20
+            };
+            var converter = new VideoConverter(fakeProcessRunner, fakeFileSystem, fakeMediaInfoProvider);
             string filePath = string.Empty;
             // Act
             string fileName = converter.GetFileName(filePath);
@@ -104,7 +136,11 @@ namespace VideoToGifConverter.Tests
             {
                 FileExistsResult = false
             };
-            var converter = new VideoConverter(fakeProcessRunner, fakeFileSystem);
+            var fakeMediaInfoProvider = new FakeMediaInfoProvider
+            {
+                Duration = 20
+            };
+            var converter = new VideoConverter(fakeProcessRunner, fakeFileSystem, fakeMediaInfoProvider);
 
             var options = new GifConversionOptions
             {
@@ -141,7 +177,12 @@ namespace VideoToGifConverter.Tests
                 FileExistsResult = true
             };
 
-            var converter = new VideoConverter(fakeProcessRunner, fakeFileSystem);
+            var fakeMediaInfoProvider = new FakeMediaInfoProvider
+            {
+                Duration = 20
+            };
+
+            var converter = new VideoConverter(fakeProcessRunner, fakeFileSystem, fakeMediaInfoProvider);
 
             var options = new GifConversionOptions
             {
@@ -178,9 +219,15 @@ namespace VideoToGifConverter.Tests
                 FileExistsResult = true
             };
 
+            var fakeMediaInfoProvider = new FakeMediaInfoProvider
+            {
+                Duration = 20
+            };
+
             var converter = new VideoConverter(
                 fakeProcessRunner,
-                fakeFileSystem);
+                fakeFileSystem,
+                fakeMediaInfoProvider);
 
             var options = new GifConversionOptions
             {
@@ -216,9 +263,15 @@ namespace VideoToGifConverter.Tests
                 FileExistsResult = true
             };
 
+            var fakeMediaInfoProvider = new FakeMediaInfoProvider
+            {
+                Duration = 20
+            };
+
             var converter = new VideoConverter(
                 fakeProcessRunner,
-                fakeFileSystem);
+                fakeFileSystem,
+                fakeMediaInfoProvider);
 
             var options = new GifConversionOptions
             {
@@ -258,9 +311,15 @@ namespace VideoToGifConverter.Tests
                 FileExistsResult = true
             };
 
+            var fakeMediaInfoProvider = new FakeMediaInfoProvider
+            {
+                Duration = 20
+            };
+
             var converter = new VideoConverter(
                 fakeProcessRunner,
-                fakeFileSystem);
+                fakeFileSystem,
+                fakeMediaInfoProvider);
 
             var options = new GifConversionOptions
             {
@@ -300,9 +359,15 @@ namespace VideoToGifConverter.Tests
                 FileExistsResult = true
             };
 
+            var fakeMediaInfoProvider = new FakeMediaInfoProvider
+            {
+                Duration = 20
+            };
+
             var converter = new VideoConverter(
                 fakeProcessRunner,
-                fakeFileSystem);
+                fakeFileSystem,
+                fakeMediaInfoProvider);
 
             var options = new GifConversionOptions
             {

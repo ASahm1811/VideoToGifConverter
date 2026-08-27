@@ -7,13 +7,16 @@ public class VideoConverter
 {
     private readonly IProcessRunner _processRunner;
     private readonly IFileSystem _fileSystem;
+    private readonly IMediaInfoProvider _mediaInfoProvider;
 
     public string? LastError { get; private set; }
 
-    public VideoConverter(IProcessRunner processRunner, IFileSystem fileSystem)
+    public VideoConverter(IProcessRunner processRunner, IFileSystem fileSystem, 
+        IMediaInfoProvider mediaInfoProvider)
     {
         _processRunner = processRunner;
         _fileSystem = fileSystem;
+        _mediaInfoProvider = mediaInfoProvider;
     }
 
     public string GetFileName(string filePath)
