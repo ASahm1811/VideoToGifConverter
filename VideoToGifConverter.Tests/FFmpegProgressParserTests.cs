@@ -5,44 +5,39 @@ namespace VideoToGifConverter.Tests;
 public class FFmpegProgressParserTests
 {
     [Fact]
-    public void ParseTime_ShouldReturnTime_WhenLineContainsValidTime()
+    public void ParseOutTimeUs_ShouldReturnSeconds_WhenLineContainsValidValue()
     {
         // Arrange
-        string line =
-            "frame=250 fps=30 time=00:00:08.33 bitrate=1234.5kbits/s";
+        string line = "out_time_us=5000000";
 
         // Act
-        TimeSpan? result = FFmpegProgressParser.ParseTime(line);
+        double? result = FFmpegProgressParser.ParseOutTimeUs(line);
 
         // Assert
-        Assert.Equal(
-            TimeSpan.FromSeconds(8.33),
-            result);
+        Assert.Equal(5.0, result);
     }
 
     [Fact]
-    public void ParseTime_ShouldReturnNull_WhenLineDoesNotContainTime()
+    public void ParseOutTimeUs_ShouldReturnNull_WhenLineDoesNotContainOutTimeUs()
     {
         // Arrange
-        string line =
-            "frame=250 fps=30 bitrate=1234.5kbits/s";
+        string line = "frame=100";
 
         // Act
-        TimeSpan? result = FFmpegProgressParser.ParseTime(line);
+        double? result = FFmpegProgressParser.ParseOutTimeUs(line);
 
         // Assert
         Assert.Null(result);
     }
 
     [Fact]
-    public void ParseTime_ShouldReturnNull_WhenTimeIsInvalid()
+    public void ParseOutTimeUs_ShouldReturnNull_WhenValueIsInvalid()
     {
         // Arrange
-        string line =
-            "frame=250 fps=30 time=not-a-time bitrate=1234.5kbits/s";
+        string line = "out_time_us=not-a-number";
 
         // Act
-        TimeSpan? result = FFmpegProgressParser.ParseTime(line);
+        double? result = FFmpegProgressParser.ParseOutTimeUs(line);
 
         // Assert
         Assert.Null(result);

@@ -293,7 +293,7 @@ namespace VideoToGifConverter.Tests
             Assert.NotNull(fakeProcessRunner.StartInfo);
 
             Assert.Equal(
-                $"-y -i \"{inputPath}\" -r 15 -vf \"scale=720:-1\" \"{outputPath}\"",
+                $"-y -i \"{inputPath}\" -r 15 -vf \"scale=720:-1\" -progress pipe:2 \"{outputPath}\"",
                 fakeProcessRunner.StartInfo!.Arguments);
         }
 
@@ -351,11 +351,8 @@ namespace VideoToGifConverter.Tests
                 ExitCode = 0
             };
 
-            fakeProcessRunner.ErrorOutputLines.Add(
-                "frame=100 fps=10 time=00:00:05.00 bitrate=100kbits/s");
-
-            fakeProcessRunner.ErrorOutputLines.Add(
-                "frame=200 fps=10 time=00:00:10.00 bitrate=100kbits/s");
+            fakeProcessRunner.ErrorOutputLines.Add("out_time_us=5000000");
+            fakeProcessRunner.ErrorOutputLines.Add("out_time_us=10000000");
 
             var fakeFileSystem = new FakeFileSystem
             {

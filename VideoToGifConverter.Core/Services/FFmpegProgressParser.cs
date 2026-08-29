@@ -5,26 +5,26 @@ namespace VideoToGifConverter.Core.Services;
 
 public static class FFmpegProgressParser
 {
-    public static TimeSpan? ParseTime(string line)
+    public static double? ParseOutTimeUs(string line)
     {
-        Match match = Regex.Match(
-            line,
-            @"time=(\d{2}):(\d{2}):(\d{2})\.(\d{2})");
+        const string prefix = "out_time_us=";
 
-        if (!match.Success)
+        if (!line.StartsWith(prefix, StringComparison.Ordinal))
         {
             return null;
         }
 
-        bool success = TimeSpan.TryParseExact(
-            match.Groups[1].Value + ":" +
-            match.Groups[2].Value + ":" +
-            match.Groups[3].Value + "." +
-            match.Groups[4].Value,
-            @"hh\:mm\:ss\.ff",
-            CultureInfo.InvariantCulture,
-            out TimeSpan time);
+        string value = line[prefix.Length..];
 
-        return success ? time : null;
+        if (!long.TryParse(
+                value,
+                NumberStyles.Integer,
+                CultureInfo.InvariantCulture,
+                out long microseconds))
+        {
+            return null;
+        }
+
+        return microseconds / 1_000_000.0;
     }
 }

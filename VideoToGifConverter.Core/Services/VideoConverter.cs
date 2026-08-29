@@ -40,7 +40,7 @@ public class VideoConverter
 
         ProcessStartInfo startInfo = new ProcessStartInfo();
         startInfo.FileName = pathExe;
-        startInfo.Arguments = $"-y -i \"{inputPath}\" -r {options.Fps} -vf \"scale={options.Width}:-1\" \"{outputPath}\"";
+        startInfo.Arguments = $"-y -i \"{inputPath}\" -r {options.Fps} -vf \"scale={options.Width}:-1\" -progress pipe:2 \"{outputPath}\"";
         startInfo.UseShellExecute = false;
         startInfo.CreateNoWindow = true;
         startInfo.RedirectStandardError = true;
@@ -55,16 +55,21 @@ public class VideoConverter
         {
             errorOutput = line;
 
-            TimeSpan? currentTime = FFmpegProgressParser.ParseTime(line);
+            double? currentTime = FFmpegProgressParser.ParseOutTimeUs(line);
 
             if (currentTime.HasValue && duration > 0)
             {
                 double percentage =
-                    currentTime.Value.TotalSeconds / duration * 100;
+                    currentTime.Value / duration * 100;
 
                 percentage = Math.Clamp(percentage, 0, 100);
 
                 progress?.Report(percentage);
+            }
+
+            if (line == "progress=end")
+            {
+                progress?.Report(100);
             }
         }
 

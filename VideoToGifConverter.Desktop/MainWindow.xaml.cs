@@ -113,6 +113,12 @@ namespace VideoToGifConverter.Desktop
             ConvertButton.IsEnabled = false;
             ConvertButton.Content = "Converting...";
             ConversionProgressBar.Visibility = Visibility.Visible;
+            ConversionProgressBar.Value = 0;
+
+            var progress = new Progress<double>(value =>
+            {
+                ConversionProgressBar.Value = value;
+            });
 
             try
             {
