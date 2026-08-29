@@ -53,23 +53,45 @@ public class VideoConverter
 
         while ((line = await _processRunner.ReadStandardErrorLineAsync()) != null)
         {
+            //System.Diagnostics.Debug.WriteLine($"FFMPEG LINE: {line}");
+
             errorOutput = line;
 
-            double? currentTime = FFmpegProgressParser.ParseOutTimeUs(line);
+            double? currentSeconds = FFmpegProgressParser.ParseOutTimeUs(line);
 
-            if (currentTime.HasValue && duration > 0)
+            //System.Diagnostics.Debug.WriteLine(
+            //    $"PARSED TIME: {currentSeconds}, DURATION: {duration}");
+
+            if (currentSeconds.HasValue && duration > 0)
             {
                 double percentage =
-                    currentTime.Value / duration * 100;
+                    currentSeconds.Value / duration * 100;
 
                 percentage = Math.Clamp(percentage, 0, 100);
 
-                progress?.Report(percentage);
+                //System.Diagnostics.Debug.WriteLine(
+                //    $"CALCULATED PROGRESS: {percentage}%");
+
+                //System.Diagnostics.Debug.WriteLine(
+                //    $"Progress object null: {progress is null}");
+
+                if (progress != null)
+                {
+                    //System.Diagnostics.Debug.WriteLine(
+                    //    $"Calling Report({percentage})");
+
+                    progress.Report(percentage);
+                }
             }
 
             if (line == "progress=end")
             {
-                progress?.Report(100);
+                //System.Diagnostics.Debug.WriteLine("Calling Report(100)");
+
+                if (progress != null)
+                {
+                    progress.Report(100);
+                }
             }
         }
 

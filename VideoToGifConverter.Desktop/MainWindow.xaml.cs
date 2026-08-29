@@ -125,7 +125,8 @@ namespace VideoToGifConverter.Desktop
                 bool success = await _converter.ConvertToGifAsync(
                     _selectedVideoPath,
                     outputPath,
-                    options);
+                    options,
+                    progress);
 
                 if (success)
                 {

@@ -37,7 +37,7 @@
                 <ComboBox
                     x:Name="FpsComboBox"
                     Width="100"
-                    SelectedIndex="0">
+                    SelectedIndex="5">
 
                     <ComboBoxItem Content="10"/>
                     <ComboBoxItem Content="12"/>
@@ -62,7 +62,7 @@
             <TextBox
             x:Name="WidthTextBox"
             Width="100"
-            Text="480"/>
+            Text="1920"/>
 
             </StackPanel>
 
