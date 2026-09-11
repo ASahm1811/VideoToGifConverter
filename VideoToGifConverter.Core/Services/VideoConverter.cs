@@ -24,9 +24,15 @@ public class VideoConverter
         return Path.GetFileName(filePath);
     }
 
-    public async Task<bool> ConvertToGifAsync(string inputPath, string outputPath, GifConversionOptions options, IProgress<double>? progress = null)
+    public async Task<bool> ConvertToGifAsync(string inputPath, 
+        string outputPath, 
+        GifConversionOptions options, 
+        IProgress<double>? progress = null,
+        CancellationToken cancellationToken = default)
     {
         LastError = null;
+
+        cancellationToken.ThrowIfCancellationRequested();
 
         string pathExe = Path.Combine(AppContext.BaseDirectory, "ffmpeg", "ffmpeg.exe");
 
@@ -38,6 +44,8 @@ public class VideoConverter
 
         double duration = await _mediaInfoProvider.GetDurationAsync(inputPath);
 
+        cancellationToken.ThrowIfCancellationRequested();
+
         ProcessStartInfo startInfo = new ProcessStartInfo();
         startInfo.FileName = pathExe;
         startInfo.Arguments = $"-y -i \"{inputPath}\" -r {options.Fps} -vf \"scale={options.Width}:-1\" -progress pipe:2 \"{outputPath}\"";
@@ -47,6 +55,12 @@ public class VideoConverter
 
         _processRunner.Start(startInfo);
 
+        using CancellationTokenRegistration cancellationRegistration =
+          cancellationToken.Register(() =>
+          {
+              _processRunner.Kill();
+          });
+
         string? errorOutput = null;
 
         string? line;
@@ -54,6 +68,8 @@ public class VideoConverter
         while ((line = await _processRunner.ReadStandardErrorLineAsync()) != null)
         {
             //System.Diagnostics.Debug.WriteLine($"FFMPEG LINE: {line}");
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             errorOutput = line;
 
@@ -75,27 +91,20 @@ public class VideoConverter
                 //System.Diagnostics.Debug.WriteLine(
                 //    $"Progress object null: {progress is null}");
 
-                if (progress != null)
-                {
-                    //System.Diagnostics.Debug.WriteLine(
-                    //    $"Calling Report({percentage})");
-
-                    progress.Report(percentage);
-                }
+                progress?.Report(percentage);
+  
             }
 
             if (line == "progress=end")
             {
                 //System.Diagnostics.Debug.WriteLine("Calling Report(100)");
-
-                if (progress != null)
-                {
-                    progress.Report(100);
-                }
+                progress?.Report(100);
             }
         }
 
         await _processRunner.WaitForExitAsync();
+
+        cancellationToken.ThrowIfCancellationRequested();
 
         if (_processRunner.ExitCode != 0)
         {

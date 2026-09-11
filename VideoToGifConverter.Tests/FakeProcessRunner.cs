@@ -8,6 +8,8 @@ public class FakeProcessRunner : IProcessRunner
     public string StandardOutput { get; set; } = string.Empty;
     public int ExitCode { get; set; }
 
+    public bool KillCalled { get; private set; }
+
     public List<string> ErrorOutputLines { get; } = new List<string>();
 
     public ProcessStartInfo? StartInfo { get; private set; }
@@ -18,6 +20,11 @@ public class FakeProcessRunner : IProcessRunner
     {
         StartInfo = startInfo;
         _currentLineIndex = 0;
+    }
+
+    public void Kill()
+    {
+        KillCalled = true;
     }
 
     public Task<string?> ReadStandardErrorLineAsync()

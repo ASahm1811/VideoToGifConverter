@@ -18,6 +18,19 @@ public class ProcessRunner : IProcessRunner
         _process.Start();
     }
 
+    public void Kill()
+    {
+        if (_process == null)
+        {
+            return;
+        }
+
+        if (!_process.HasExited)
+        {
+            _process.Kill(entireProcessTree: true);
+        }
+    }
+
     public async Task<string?> ReadStandardErrorLineAsync()
     {
         if (_process == null)
