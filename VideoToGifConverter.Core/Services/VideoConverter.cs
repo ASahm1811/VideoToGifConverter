@@ -61,58 +61,54 @@ public class VideoConverter
               _processRunner.Kill();
           });
 
-        string? errorOutput = null;
-
-        string? line;
-
-        while ((line = await _processRunner.ReadStandardErrorLineAsync()) != null)
+        try
         {
-            //System.Diagnostics.Debug.WriteLine($"FFMPEG LINE: {line}");
+            string? errorOutput = null;
+
+            string? line;
+
+            while ((line = await _processRunner.ReadStandardErrorLineAsync()) != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                errorOutput = line;
+
+                double? currentSeconds =
+                    FFmpegProgressParser.ParseOutTimeUs(line);
+
+                if (currentSeconds.HasValue && duration > 0)
+                {
+                    double percentage =
+                        currentSeconds.Value / duration * 100;
+
+                    percentage = Math.Clamp(percentage, 0, 100);
+
+                    progress?.Report(percentage);
+                }
+
+                if (line == "progress=end")
+                {
+                    progress?.Report(100);
+                }
+            }
+
+            await _processRunner.WaitForExitAsync();
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            errorOutput = line;
-
-            double? currentSeconds = FFmpegProgressParser.ParseOutTimeUs(line);
-
-            //System.Diagnostics.Debug.WriteLine(
-            //    $"PARSED TIME: {currentSeconds}, DURATION: {duration}");
-
-            if (currentSeconds.HasValue && duration > 0)
+            if (_processRunner.ExitCode != 0)
             {
-                double percentage =
-                    currentSeconds.Value / duration * 100;
-
-                percentage = Math.Clamp(percentage, 0, 100);
-
-                //System.Diagnostics.Debug.WriteLine(
-                //    $"CALCULATED PROGRESS: {percentage}%");
-
-                //System.Diagnostics.Debug.WriteLine(
-                //    $"Progress object null: {progress is null}");
-
-                progress?.Report(percentage);
-  
+                LastError = errorOutput;
+                return false;
             }
 
-            if (line == "progress=end")
-            {
-                //System.Diagnostics.Debug.WriteLine("Calling Report(100)");
-                progress?.Report(100);
-            }
+            return true;
         }
-
-        await _processRunner.WaitForExitAsync();
-
-        cancellationToken.ThrowIfCancellationRequested();
-
-        if (_processRunner.ExitCode != 0)
+        catch (OperationCanceledException)
         {
-            LastError = errorOutput;
-            return false;
+            _fileSystem.DeleteFile(outputPath);
+            throw;
         }
-
-        return true;
     }
 
 }

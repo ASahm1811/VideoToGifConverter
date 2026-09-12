@@ -10,4 +10,8 @@ public class FakeFileSystem : IFileSystem
     {
         return FileExistsResult;
     }
+
+    public void DeleteFile(string path)
+    {
+    }
 }
