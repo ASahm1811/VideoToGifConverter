@@ -19,6 +19,8 @@ namespace VideoToGifConverter.Desktop
 
         private string? _selectedVideoPath;
 
+        private CancellationTokenSource? _conversionCts;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -111,9 +113,12 @@ namespace VideoToGifConverter.Desktop
 
             // NOW start the converting UI
             ConvertButton.IsEnabled = false;
+            CancelButton.IsEnabled = true;
             ConvertButton.Content = "Converting...";
             ConversionProgressBar.Visibility = Visibility.Visible;
             ConversionProgressBar.Value = 0;
+
+            _conversionCts = new CancellationTokenSource();
 
             var progress = new Progress<double>(value =>
             {
@@ -126,7 +131,8 @@ namespace VideoToGifConverter.Desktop
                     _selectedVideoPath,
                     outputPath,
                     options,
-                    progress);
+                    progress,
+                    _conversionCts.Token);
 
                 if (success)
                 {
@@ -137,6 +143,10 @@ namespace VideoToGifConverter.Desktop
                     MessageBox.Show($"Conversion failed:\n\n{_converter.LastError}");
                 }
             }
+            catch (OperationCanceledException)
+            {
+                MessageBox.Show("Conversion cancelled.");
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"An error occurred:\n{ex.Message}");
@@ -144,9 +154,18 @@ namespace VideoToGifConverter.Desktop
             finally
             {
                 ConvertButton.IsEnabled = true;
+                CancelButton.IsEnabled = false;
                 ConvertButton.Content = "Convert";
                 ConversionProgressBar.Visibility = Visibility.Collapsed;
+
+                _conversionCts?.Dispose();
+                _conversionCts = null;
             }
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            _conversionCts?.Cancel();
         }
     }
 }

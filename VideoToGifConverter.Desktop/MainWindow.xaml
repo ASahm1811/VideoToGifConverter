@@ -81,6 +81,14 @@
                 IsIndeterminate="False"
                 Visibility="Collapsed" />
 
+            <Button
+                x:Name="CancelButton"
+                Content="Cancel"
+                Width="100"
+                Margin="0,10,0,0"
+                IsEnabled="False"
+                Click="CancelButton_Click" />
+
         </StackPanel>
 
     </Grid>
