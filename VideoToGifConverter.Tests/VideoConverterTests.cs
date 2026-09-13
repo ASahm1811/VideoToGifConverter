@@ -401,5 +401,144 @@ namespace VideoToGifConverter.Tests
             }
         }
 
+        [Fact]
+        public async Task ConvertToGifAsync_Cancellation_KillsProcess()
+        {
+            // Arrange
+            var processRunner = new FakeProcessRunner
+            {
+                ErrorOutputLines = { "out_time_us=1000000" }
+            };
+
+            var fileSystem = new FakeFileSystem
+            {
+                FileExistsResult = true
+            };
+
+            var mediaInfoProvider = new FakeMediaInfoProvider
+            {
+                Duration = 10
+            };
+
+            var converter = new VideoConverter(
+                processRunner,
+                fileSystem,
+                mediaInfoProvider);
+
+            using var cancellationSource = new CancellationTokenSource();
+
+            processRunner.OnReadStandardErrorLine = () =>
+            {
+                cancellationSource.Cancel();
+            };
+
+            // Act
+            await Assert.ThrowsAsync<OperationCanceledException>(() =>
+                converter.ConvertToGifAsync(
+                    "input.mp4",
+                    "output.gif",
+                    new GifConversionOptions
+                    {
+                        Fps = 30,
+                        Width = 1920
+                    },
+                    cancellationToken: cancellationSource.Token));
+
+            // Assert
+            Assert.True(processRunner.KillCalled);
+        }
+
+        [Fact]
+        public async Task ConvertToGifAsync_Cancellation_DeletesPartialOutput()
+        {
+            // Arrange
+            var processRunner = new FakeProcessRunner
+            {
+                ErrorOutputLines = { "out_time_us=1000000" }
+            };
+
+            var fileSystem = new FakeFileSystem
+            {
+                FileExistsResult = true
+            };
+
+            var mediaInfoProvider = new FakeMediaInfoProvider
+            {
+                Duration = 10
+            };
+
+            var converter = new VideoConverter(
+                processRunner,
+                fileSystem,
+                mediaInfoProvider);
+
+            using var cancellationSource = new CancellationTokenSource();
+
+            processRunner.OnReadStandardErrorLine = () =>
+            {
+                cancellationSource.Cancel();
+            };
+
+            // Act
+            await Assert.ThrowsAsync<OperationCanceledException>(() =>
+                converter.ConvertToGifAsync(
+                    "input.mp4",
+                    "output.gif",
+                    new GifConversionOptions
+                    {
+                        Fps = 30,
+                        Width = 1920
+                    },
+                    cancellationToken: cancellationSource.Token));
+
+            // Assert
+            Assert.True(fileSystem.DeleteFileCalled);
+            Assert.Equal("output.gif", fileSystem.DeletedFilePath);
+        }
+
+        [Fact]
+        public async Task ConvertToGifAsync_Cancellation_ThrowsOperationCanceledException()
+        {
+            // Arrange
+            var processRunner = new FakeProcessRunner
+            {
+                ErrorOutputLines = { "out_time_us=1000000" }
+            };
+
+            var fileSystem = new FakeFileSystem
+            {
+                FileExistsResult = true
+            };
+
+            var mediaInfoProvider = new FakeMediaInfoProvider
+            {
+                Duration = 10
+            };
+
+            var converter = new VideoConverter(
+                processRunner,
+                fileSystem,
+                mediaInfoProvider);
+
+            using var cancellationSource = new CancellationTokenSource();
+
+            processRunner.OnReadStandardErrorLine = () =>
+            {
+                cancellationSource.Cancel();
+            };
+
+            // Act & Assert
+            await Assert.ThrowsAsync<OperationCanceledException>(() =>
+                converter.ConvertToGifAsync(
+                    "input.mp4",
+                    "output.gif",
+                    new GifConversionOptions
+                    {
+                        Fps = 30,
+                        Width = 1920
+                    },
+                    cancellationToken: cancellationSource.Token));
+        }
+
     }
 }

@@ -10,6 +10,8 @@ public class FakeProcessRunner : IProcessRunner
 
     public bool KillCalled { get; private set; }
 
+    public Action? OnReadStandardErrorLine { get; set; }
+
     public List<string> ErrorOutputLines { get; } = new List<string>();
 
     public ProcessStartInfo? StartInfo { get; private set; }
@@ -29,6 +31,12 @@ public class FakeProcessRunner : IProcessRunner
 
     public Task<string?> ReadStandardErrorLineAsync()
     {
+        Action? callback = OnReadStandardErrorLine;
+
+        OnReadStandardErrorLine = null;
+
+        callback?.Invoke();
+
         if (_currentLineIndex >= ErrorOutputLines.Count)
         {
             return Task.FromResult<string?>(null);
