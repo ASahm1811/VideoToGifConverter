@@ -7,6 +7,11 @@ public class FileSystem : IFileSystem
         return File.Exists(path);
     }
 
+    public bool DirectoryExists(string path)
+    {
+        return Directory.Exists(path);
+    }
+
     public void DeleteFile(string path)
     {
         if (File.Exists(path))

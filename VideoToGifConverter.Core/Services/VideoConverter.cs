@@ -34,6 +34,36 @@ public class VideoConverter
 
         cancellationToken.ThrowIfCancellationRequested();
 
+        if (options.Fps <= 0)
+        {
+            LastError = "FPS must be greater than 0.";
+            return false;
+        }
+
+        if (options.Width <= 0)
+        {
+            LastError = "Width must be greater than 0.";
+            return false;
+        }
+
+        if (string.Equals(
+        inputPath,
+        outputPath,
+        StringComparison.OrdinalIgnoreCase))
+        {
+            LastError = "Input and output files must be different.";
+            return false;
+        }
+
+        string? outputDirectory = Path.GetDirectoryName(outputPath);
+
+        if (!string.IsNullOrEmpty(outputDirectory) &&
+            !_fileSystem.DirectoryExists(outputDirectory))
+        {
+            LastError = "Output directory was not found.";
+            return false;
+        }
+
         string pathExe = Path.Combine(AppContext.BaseDirectory, "ffmpeg", "ffmpeg.exe");
 
         if (!_fileSystem.FileExists(pathExe))
@@ -42,7 +72,29 @@ public class VideoConverter
             return false;
         }
 
-        double duration = await _mediaInfoProvider.GetDurationAsync(inputPath);
+        if (!_fileSystem.FileExists(inputPath))
+        {
+            LastError = "Input video file was not found.";
+            return false;
+        }
+
+        double duration;
+
+        try
+        {
+            duration = await _mediaInfoProvider.GetDurationAsync(inputPath);
+        }
+        catch (InvalidOperationException ex)
+        {
+            LastError = ex.Message;
+            return false;
+        }
+
+        if (duration <= 0)
+        {
+            LastError = "Invalid video duration.";
+            return false;
+        }
 
         cancellationToken.ThrowIfCancellationRequested();
 

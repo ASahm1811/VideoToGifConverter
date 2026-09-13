@@ -540,5 +540,286 @@ namespace VideoToGifConverter.Tests
                     cancellationToken: cancellationSource.Token));
         }
 
+        [Fact]
+        public async Task ConvertToGifAsync_ShouldReturnFalse_WhenInputFileIsMissing()
+        {
+            // Arrange
+            var processRunner = new FakeProcessRunner();
+
+            var fileSystem = new FakeFileSystem
+            {
+                FileExistsResult = true,
+                MissingFilePath = "missing.mp4"
+            };
+
+            var mediaInfoProvider = new FakeMediaInfoProvider
+            {
+                Duration = 20
+            };
+
+            var converter = new VideoConverter(
+                processRunner,
+                fileSystem,
+                mediaInfoProvider);
+
+            var options = new GifConversionOptions
+            {
+                Fps = 10,
+                Width = 480
+            };
+
+            // Act
+            bool result = await converter.ConvertToGifAsync(
+                "missing.mp4",
+                "test.gif",
+                options);
+
+            // Assert
+            Assert.False(result);
+            Assert.Equal("Input video file was not found.", converter.LastError);
+            Assert.Null(processRunner.StartInfo);
+        }
+
+        [Fact]
+        public async Task ConvertToGifAsync_ShouldReturnFalse_WhenDurationCannotBeDetermined()
+        {
+            // Arrange
+            var processRunner = new FakeProcessRunner();
+
+            var fileSystem = new FakeFileSystem
+            {
+                FileExistsResult = true
+            };
+
+            var mediaInfoProvider = new FakeMediaInfoProvider
+            {
+                ExceptionToThrow = new InvalidOperationException(
+                    "Could not determine video duration.")
+            };
+
+            var converter = new VideoConverter(
+                processRunner,
+                fileSystem,
+                mediaInfoProvider);
+
+            var options = new GifConversionOptions
+            {
+                Fps = 10,
+                Width = 480
+            };
+
+            // Act
+            bool result = await converter.ConvertToGifAsync(
+                "test.mp4",
+                "test.gif",
+                options);
+
+            // Assert
+            Assert.False(result);
+            Assert.Equal(
+                "Could not determine video duration.",
+                converter.LastError);
+            Assert.Null(processRunner.StartInfo);
+        }
+
+        [Fact]
+        public async Task ConvertToGifAsync_ShouldReturnFalse_WhenDurationIsInvalid()
+        {
+            // Arrange
+            var processRunner = new FakeProcessRunner();
+
+            var fileSystem = new FakeFileSystem
+            {
+                FileExistsResult = true
+            };
+
+            var mediaInfoProvider = new FakeMediaInfoProvider
+            {
+                Duration = 0
+            };
+
+            var converter = new VideoConverter(
+                processRunner,
+                fileSystem,
+                mediaInfoProvider);
+
+            var options = new GifConversionOptions
+            {
+                Fps = 10,
+                Width = 480
+            };
+
+            // Act
+            bool result = await converter.ConvertToGifAsync(
+                "test.mp4",
+                "test.gif",
+                options);
+
+            // Assert
+            Assert.False(result);
+            Assert.Equal("Invalid video duration.", converter.LastError);
+            Assert.Null(processRunner.StartInfo);
+        }
+
+        [Fact]
+        public async Task ConvertToGifAsync_ShouldReturnFalse_WhenFpsIsInvalid()
+        {
+            // Arrange
+            var processRunner = new FakeProcessRunner();
+
+            var fileSystem = new FakeFileSystem
+            {
+                FileExistsResult = true
+            };
+
+            var mediaInfoProvider = new FakeMediaInfoProvider
+            {
+                Duration = 20
+            };
+
+            var converter = new VideoConverter(
+                processRunner,
+                fileSystem,
+                mediaInfoProvider);
+
+            var options = new GifConversionOptions
+            {
+                Fps = 0,
+                Width = 480
+            };
+
+            // Act
+            bool result = await converter.ConvertToGifAsync(
+                "test.mp4",
+                "test.gif",
+                options);
+
+            // Assert
+            Assert.False(result);
+            Assert.Equal("FPS must be greater than 0.", converter.LastError);
+            Assert.Null(processRunner.StartInfo);
+        }
+
+        [Fact]
+        public async Task ConvertToGifAsync_ShouldReturnFalse_WhenWidthIsInvalid()
+        {
+            // Arrange
+            var processRunner = new FakeProcessRunner();
+
+            var fileSystem = new FakeFileSystem
+            {
+                FileExistsResult = true
+            };
+
+            var mediaInfoProvider = new FakeMediaInfoProvider
+            {
+                Duration = 20
+            };
+
+            var converter = new VideoConverter(
+                processRunner,
+                fileSystem,
+                mediaInfoProvider);
+
+            var options = new GifConversionOptions
+            {
+                Fps = 30,
+                Width = 0
+            };
+
+            // Act
+            bool result = await converter.ConvertToGifAsync(
+                "test.mp4",
+                "test.gif",
+                options);
+
+            // Assert
+            Assert.False(result);
+            Assert.Equal("Width must be greater than 0.", converter.LastError);
+            Assert.Null(processRunner.StartInfo);
+        }
+
+        [Fact]
+        public async Task ConvertToGifAsync_ShouldReturnFalse_WhenInputAndOutputAreSameFile()
+        {
+            // Arrange
+            var processRunner = new FakeProcessRunner();
+
+            var fileSystem = new FakeFileSystem
+            {
+                FileExistsResult = true
+            };
+
+            var mediaInfoProvider = new FakeMediaInfoProvider
+            {
+                Duration = 20
+            };
+
+            var converter = new VideoConverter(
+                processRunner,
+                fileSystem,
+                mediaInfoProvider);
+
+            var options = new GifConversionOptions
+            {
+                Fps = 30,
+                Width = 480
+            };
+
+            // Act
+            bool result = await converter.ConvertToGifAsync(
+                "test.mp4",
+                "test.mp4",
+                options);
+
+            // Assert
+            Assert.False(result);
+            Assert.Equal(
+                "Input and output files must be different.",
+                converter.LastError);
+            Assert.Null(processRunner.StartInfo);
+        }
+
+        [Fact]
+        public async Task ConvertToGifAsync_ShouldReturnFalse_WhenOutputDirectoryIsMissing()
+        {
+            // Arrange
+            var processRunner = new FakeProcessRunner();
+
+            var fileSystem = new FakeFileSystem
+            {
+                FileExistsResult = true,
+                DirectoryExistsResult = false
+            };
+
+            var mediaInfoProvider = new FakeMediaInfoProvider
+            {
+                Duration = 20
+            };
+
+            var converter = new VideoConverter(
+                processRunner,
+                fileSystem,
+                mediaInfoProvider);
+
+            var options = new GifConversionOptions
+            {
+                Fps = 30,
+                Width = 480
+            };
+
+            // Act
+            bool result = await converter.ConvertToGifAsync(
+                "test.mp4",
+                @"C:\DoesNotExist\output.gif",
+                options);
+
+            // Assert
+            Assert.False(result);
+            Assert.Equal(
+                "Output directory was not found.",
+                converter.LastError);
+            Assert.Null(processRunner.StartInfo);
+        }
     }
 }
