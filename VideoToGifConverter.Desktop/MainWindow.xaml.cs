@@ -115,14 +115,17 @@ namespace VideoToGifConverter.Desktop
             ConvertButton.IsEnabled = false;
             CancelButton.IsEnabled = true;
             ConvertButton.Content = "Converting...";
-            ConversionProgressBar.Visibility = Visibility.Visible;
+
+            ProgressPanel.Visibility = Visibility.Visible;
             ConversionProgressBar.Value = 0;
+            ProgressPercentageText.Text = "0%";
 
             _conversionCts = new CancellationTokenSource();
 
             var progress = new Progress<double>(value =>
             {
                 ConversionProgressBar.Value = value;
+                ProgressPercentageText.Text = $"{value:0}%";
             });
 
             try
@@ -156,7 +159,7 @@ namespace VideoToGifConverter.Desktop
                 ConvertButton.IsEnabled = true;
                 CancelButton.IsEnabled = false;
                 ConvertButton.Content = "Convert";
-                ConversionProgressBar.Visibility = Visibility.Collapsed;
+                ProgressPanel.Visibility = Visibility.Collapsed;
 
                 _conversionCts?.Dispose();
                 _conversionCts = null;

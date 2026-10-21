@@ -73,13 +73,33 @@
                 Margin="0,10,0,0"
                 Click="Convert_Click"/>
 
-            <ProgressBar
-                x:Name="ConversionProgressBar"
-                Minimum="0"
-                Maximum="100"
-                Value="0"
-                IsIndeterminate="False"
-                Visibility="Collapsed" />
+            <Grid
+                x:Name="ProgressPanel"
+                Margin="0,10,0,0"
+                Visibility="Collapsed">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <ProgressBar
+                    x:Name="ConversionProgressBar"
+                    Grid.Column="0"
+                    Minimum="0"
+                    Maximum="100"
+                    Value="0"
+                    Height="15"
+                    IsIndeterminate="False" />
+
+                <TextBlock
+                    x:Name="ProgressPercentageText"
+                    Grid.Column="1"
+                    Text="0%"
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center" />
+
+            </Grid>
 
             <Button
                 x:Name="CancelButton"
