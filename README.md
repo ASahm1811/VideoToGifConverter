@@ -101,26 +101,35 @@ dotnet test
 
 The tests use fake implementations of external dependencies, allowing the conversion logic to be tested without launching FFmpeg.
 
-## Development Status
+## Release History
 
 ### v1.0 — Initial Release
 
 The first functional version of the desktop converter, including video selection, adjustable settings, basic validation and GIF generation.
 
-### v1.1 — In Development
+### v1.1.0 — Ready for Release
 
-Implemented improvements:
+Version 1.1 introduces improvements to GIF quality, conversion reliability, and the user interface.
 
-- Real-time conversion progress
-- Cancellation support
-- Automatic cleanup after cancellation
-- Expanded input validation
-- Palette-optimized GIF generation
-- Improved interface layout
-- Percentage and conversion status displays
-- Automated tests for conversion behavior
+**New features and improvements:**
 
-Remaining work: documentation review and final release checks.
+- Real-time conversion progress with percentage display
+- Conversion cancellation support
+- Automatic cleanup of incomplete GIF files
+- Expanded input validation and error handling
+- GIF palette optimization using FFmpeg's `palettegen` and `paletteuse` filters
+- Improved WPF layout and control alignment
+- More practical default settings (15 FPS, 480 pixels)
+- Conversion status messages
+- Improved filename display
+- Expanded automated test coverage
+
+**Verification:**
+
+- 25 automated unit tests passing
+- Release build successful
+- Manual GIF conversion and cancellation tested
+- Release executable tested outside Visual Studio
 
 ## Planned Improvements
 
