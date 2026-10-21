@@ -52,6 +52,7 @@ namespace VideoToGifConverter.Desktop
                 string fileName = _converter.GetFileName(filePath);
 
                 SelectedVideoText.Text = fileName;
+                StatusText.Text = "Ready to convert.";
 
             }
         }
@@ -119,6 +120,7 @@ namespace VideoToGifConverter.Desktop
             ProgressPanel.Visibility = Visibility.Visible;
             ConversionProgressBar.Value = 0;
             ProgressPercentageText.Text = "0%";
+            StatusText.Text = "Converting...";
 
             _conversionCts = new CancellationTokenSource();
 
@@ -139,19 +141,23 @@ namespace VideoToGifConverter.Desktop
 
                 if (success)
                 {
+                    StatusText.Text = "Conversion completed successfully!";
                     MessageBox.Show("Conversion completed!");
                 }
                 else
                 {
+                    StatusText.Text = "Conversion failed.";
                     MessageBox.Show($"Conversion failed:\n\n{_converter.LastError}");
                 }
             }
             catch (OperationCanceledException)
             {
+                StatusText.Text = "Conversion cancelled.";
                 MessageBox.Show("Conversion cancelled.");
             }
             catch (Exception ex)
             {
+                StatusText.Text = "An unexpected error occurred.";
                 MessageBox.Show($"An error occurred:\n{ex.Message}");
             }
             finally
