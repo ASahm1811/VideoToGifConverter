@@ -100,7 +100,11 @@ public class VideoConverter
 
         ProcessStartInfo startInfo = new ProcessStartInfo();
         startInfo.FileName = pathExe;
-        startInfo.Arguments = $"-y -i \"{inputPath}\" -r {options.Fps} -vf \"scale={options.Width}:-1\" -progress pipe:2 \"{outputPath}\"";
+
+        //startInfo.Arguments = $"-y -i \"{inputPath}\" -r {options.Fps} -vf \"scale={options.Width}:-1\" -progress pipe:2 \"{outputPath}\"";
+        string filterGraph = $"[0:v]fps={options.Fps},scale={options.Width}:-1:flags=lanczos,split[a][b];[a]palettegen[p];[b][p]paletteuse";
+        startInfo.Arguments = $"-y -i \"{inputPath}\" -filter_complex \"{filterGraph}\" -progress pipe:2 \"{outputPath}\"";
+
         startInfo.UseShellExecute = false;
         startInfo.CreateNoWindow = true;
         startInfo.RedirectStandardError = true;

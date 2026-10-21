@@ -292,8 +292,12 @@ namespace VideoToGifConverter.Tests
             Assert.True(result);
             Assert.NotNull(fakeProcessRunner.StartInfo);
 
+            //Assert.Equal(
+            //    $"-y -i \"{inputPath}\" -r 15 -vf \"scale=720:-1\" -progress pipe:2 \"{outputPath}\"",
+            //    fakeProcessRunner.StartInfo!.Arguments);
+
             Assert.Equal(
-                $"-y -i \"{inputPath}\" -r 15 -vf \"scale=720:-1\" -progress pipe:2 \"{outputPath}\"",
+                $"-y -i \"{inputPath}\" -filter_complex \"[0:v]fps=15,scale=720:-1:flags=lanczos,split[a][b];[a]palettegen[p];[b][p]paletteuse\" -progress pipe:2 \"{outputPath}\"",
                 fakeProcessRunner.StartInfo!.Arguments);
         }
 
